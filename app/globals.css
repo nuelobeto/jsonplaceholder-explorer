@@ -134,6 +134,109 @@
   --brand-foreground: oklch(0.145 0 0);
 }
 
+/* ---------------------------------------------------------------------------
+   Data-visualisation palette.
+
+   Kept separate from the UI tokens above because those are intentionally
+   greyscale (--chart-1..5 carry no chroma), which cannot encode identity: a
+   categorical scale needs hues that stay apart for colour-blind readers.
+
+   These eight steps per mode were checked with the data-viz validator against
+   this project's own card surfaces (#ffffff light, #171717 dark) rather than
+   generic ones. Both modes pass the lightness-band, chroma-floor, CVD-
+   separation and normal-vision gates. Light mode WARNs on contrast for the
+   aqua/yellow/magenta slots, which obliges the relief rule — every chart here
+   ships visible labels and a table view, so no value is colour-only.
+
+   The dark column is the same hues re-stepped for the dark surface, not a
+   flip: an automatic inversion lands outside the dark lightness band.
+   --------------------------------------------------------------------------- */
+:root {
+  --viz-1: #2a78d6; /* blue    */
+  --viz-2: #eb6834; /* orange  */
+  --viz-3: #1baf7a; /* aqua    */
+  --viz-4: #eda100; /* yellow  */
+  --viz-5: #e87ba4; /* magenta */
+  --viz-6: #008300; /* green   */
+
+  /* Unfilled meter track: a lighter step of slot 1's own ramp. */
+  --viz-track: #dce9fb;
+
+  /* Sequential ramp (one hue, low→high distance from the surface).
+     Each step ships the ink that clears 4.5:1 on it, so heatmap cells can
+     carry their value as text. Step 4 is #256abf rather than the ramp's
+     #2a78d6: that step contrasts 4.46 against ink and 4.42 against white —
+     under 4.5 either way, the one hole in the ramp for small text. */
+  --viz-seq-0: #f1f5f9;
+  --viz-seq-1: #cde2fb;
+  --viz-seq-2: #9ec5f4;
+  --viz-seq-3: #5598e7;
+  --viz-seq-4: #256abf;
+  --viz-seq-5: #184f95;
+
+  --viz-seq-0-ink: #0b0b0b;
+  --viz-seq-1-ink: #0b0b0b;
+  --viz-seq-2-ink: #0b0b0b;
+  --viz-seq-3-ink: #0b0b0b;
+  --viz-seq-4-ink: #ffffff;
+  --viz-seq-5-ink: #ffffff;
+
+  /* Pastel widget tints. Decorative identity for the stat cards, not an
+     encoding — the hue says "this is the posts card", never a magnitude, so
+     the categorical gates don't apply. What does apply is text contrast:
+     every tint clears 4.5:1 against both inks below (worst 6.05). */
+  --viz-tint-1: #e8f1fd;
+  --viz-tint-2: #fdeee7;
+  --viz-tint-3: #e5f7f1;
+  --viz-tint-4: #fdf4e3;
+  --viz-tint-5: #fdedf3;
+  --viz-tint-6: #e6f4e6;
+
+  --viz-tint-ink: #171717;
+  --viz-tint-muted: #5a5a5a;
+
+  --viz-grid: #e1e0d9;
+  --viz-axis: #c3c2b7;
+}
+
+.dark {
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #199e70;
+  --viz-4: #c98500;
+  --viz-5: #d55181;
+  --viz-6: #008300;
+
+  --viz-track: #24344a;
+
+  --viz-seq-0: #1f1f1f;
+  --viz-seq-1: #184f95;
+  --viz-seq-2: #256abf;
+  --viz-seq-3: #3987e5;
+  --viz-seq-4: #6da7ec;
+  --viz-seq-5: #9ec5f4;
+
+  --viz-seq-0-ink: #ffffff;
+  --viz-seq-1-ink: #ffffff;
+  --viz-seq-2-ink: #ffffff;
+  --viz-seq-3-ink: #0b0b0b;
+  --viz-seq-4-ink: #0b0b0b;
+  --viz-seq-5-ink: #0b0b0b;
+
+  --viz-tint-1: #16283d;
+  --viz-tint-2: #3a2419;
+  --viz-tint-3: #123026;
+  --viz-tint-4: #33280f;
+  --viz-tint-5: #351f28;
+  --viz-tint-6: #102a10;
+
+  --viz-tint-ink: #fafafa;
+  --viz-tint-muted: #b4b4b4;
+
+  --viz-grid: #2c2c2a;
+  --viz-axis: #383835;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

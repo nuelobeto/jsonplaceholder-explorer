@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 
-import type { User } from "./schema"
+import type { User } from "./schemas"
 import { filterUsers, getInitials } from "./utils"
 
 const makeUser = (overrides: Partial<User> = {}): User => ({

@@ -34,7 +34,7 @@ const itemV: Variants = {
 
 const stats = [
   { value: "6", label: "resources" },
-  { value: "5,860", label: "records" },
+  { value: "5,910", label: "records" },
 ]
 
 export const Hero = () => {
