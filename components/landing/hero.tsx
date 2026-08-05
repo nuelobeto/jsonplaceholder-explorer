@@ -15,6 +15,7 @@ import { Container } from "@/components/container"
 import { buttonVariants } from "@/components/ui/button"
 import { ApiPreview } from "@/components/landing/api-preview"
 import { cn } from "@/lib/utils"
+import { ROUTES } from "@/lib/constants"
 
 const containerV: Variants = {
   hidden: {},
@@ -34,7 +35,6 @@ const itemV: Variants = {
 const stats = [
   { value: "6", label: "resources" },
   { value: "5,860", label: "records" },
-  { value: "0", label: "API keys" },
 ]
 
 export const Hero = () => {
@@ -100,7 +100,7 @@ export const Hero = () => {
             className="mt-5 max-w-xl text-pretty text-muted-foreground md:text-lg"
           >
             Browse users, posts, photos, albums, comments, and todos through a
-            fast, typed dashboard — no setup, no API keys.
+            fast, typed dashboard.
           </motion.p>
 
           <motion.div
@@ -108,10 +108,10 @@ export const Hero = () => {
             className="mt-8 flex flex-wrap justify-center gap-3"
           >
             <Link
-              href="/dashboard"
+              href={ROUTES.dashboard.overview}
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "group h-11 gap-2 px-6 text-sm shadow-lg shadow-brand/20 transition-shadow hover:shadow-xl hover:shadow-brand/30"
+                "group h-11 w-full gap-2 px-6 text-sm shadow-lg shadow-brand/20 transition-shadow hover:shadow-xl hover:shadow-brand/30 min-[390px]:w-fit"
               )}
             >
               Open the dashboard
@@ -121,7 +121,7 @@ export const Hero = () => {
               href="#features"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "h-11 px-6 text-sm backdrop-blur"
+                "h-11 w-full px-6 text-sm backdrop-blur min-[390px]:w-fit"
               )}
             >
               See features

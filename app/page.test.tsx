@@ -1,6 +1,7 @@
 import { expect, test } from "vitest"
 import { render, screen } from "@testing-library/react"
 import Page from "./page"
+import { ROUTES } from "@/lib/constants"
 
 test("renders the hero", () => {
   render(<Page />)
@@ -28,6 +29,7 @@ test("points visitors at the dashboard", () => {
   const links = screen.getAllByRole("link", { name: /dashboard/i })
   expect(links.length).toBeGreaterThan(0)
   for (const link of links) {
-    expect(link.getAttribute("href")).toBe("/dashboard")
+    // There is no /dashboard index route — overview is the entry point.
+    expect(link.getAttribute("href")).toBe(ROUTES.dashboard.overview)
   }
 })
