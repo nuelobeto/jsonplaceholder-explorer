@@ -68,6 +68,7 @@ export const Header = () => {
               className="md:hidden"
             >
               <MenuIcon />
+              <span className="sr-only">Open menu</span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-[180px]">
               <DropdownMenuGroup>

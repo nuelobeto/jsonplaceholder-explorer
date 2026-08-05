@@ -1,6 +1,7 @@
 // components/landing/footer.tsx
 import Link from "next/link"
 import { Container } from "@/components/container"
+import { ROUTES } from "@/lib/constants"
 
 const columns = [
   {
@@ -9,7 +10,7 @@ const columns = [
       { href: "#features", label: "Features" },
       { href: "#resources", label: "Resources" },
       { href: "#about", label: "About" },
-      { href: "/dashboard", label: "Dashboard" },
+      { href: ROUTES.dashboard.overview, label: "Dashboard" },
     ],
   },
   {
