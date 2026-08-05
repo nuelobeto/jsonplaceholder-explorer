@@ -16,9 +16,18 @@ const DEBOUNCE_MS = 250
 
 /**
  * Keeps the text box and the `?q=` search param in sync. The URL stays the
- * source of truth so a search is linkable and survives a refresh.
+ * source of truth so a search is linkable and survives a refresh, and `?page=`
+ * is deliberately dropped — a new query starts over at page one.
  */
-export const UsersSearch = ({ query }: { query: string }) => {
+export const SearchInput = ({
+  query,
+  placeholder,
+  label,
+}: {
+  query: string
+  placeholder: string
+  label: string
+}) => {
   const router = useRouter()
   const pathname = usePathname()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -62,8 +71,8 @@ export const UsersSearch = ({ query }: { query: string }) => {
           name="q"
           value={value}
           onChange={(event) => setValue(event.target.value)}
-          placeholder="Search by name, email, company…"
-          aria-label="Search users"
+          placeholder={placeholder}
+          aria-label={label}
           className="[&::-webkit-search-cancel-button]:appearance-none"
         />
         <InputGroupAddon align="inline-end">

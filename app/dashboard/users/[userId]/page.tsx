@@ -1,10 +1,14 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
   ArrowLeftIcon,
   BriefcaseIcon,
+  CircleCheckIcon,
+  FileTextIcon,
   GlobeIcon,
+  LibraryIcon,
   MailIcon,
   MapPinIcon,
   PhoneIcon,
@@ -20,20 +24,80 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { AlbumList } from "@/features/albums/components/album-list"
+import { getAlbumsByUser } from "@/features/albums/services"
+import { PostList } from "@/features/posts/components/post-list"
+import { getPostsByUser } from "@/features/posts/services"
+import { TodoList } from "@/features/todos/components/todo-list"
+import { getTodosByUser } from "@/features/todos/services"
 import { UserMap } from "@/features/users/components/user-map"
+import { UserResourceCard } from "@/features/users/components/user-resource-card"
+import { ResourceCardSkeleton } from "@/features/users/components/resource-card-skeleton"
 import { getUser } from "@/features/users/services"
-import { getInitials } from "@/features/users/utils"
+import { getInitials, parseUserId } from "@/features/users/utils"
 import { ROUTES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 type PageProps = { params: Promise<{ userId: string }> }
 
-/** Rejects "abc", "1.5", "-2" and "01" before they ever reach the network. */
-const parseUserId = (raw: string) =>
-  /^[1-9]\d*$/.test(raw) ? Number(raw) : null
+/** How many of each resource the detail page previews before "View more". */
+const PREVIEW_COUNT = 10
 
 const toHref = (website: string) =>
   website.startsWith("http") ? website : `https://${website}`
+
+/**
+ * Each section fetches on its own so a slow resource streams in late instead of
+ * holding up the whole page. The user has already resolved by the time these
+ * render, so `notFound()` has set its status before any of this streams.
+ */
+const PostsSection = async ({ userId }: { userId: number }) => {
+  const posts = await getPostsByUser(userId)
+
+  return (
+    <UserResourceCard
+      title="Posts"
+      icon={<FileTextIcon />}
+      total={posts.length}
+      viewMoreHref={ROUTES.dashboard.userPosts(userId)}
+      emptyMessage="This user hasn't posted anything."
+    >
+      <PostList posts={posts.slice(0, PREVIEW_COUNT)} />
+    </UserResourceCard>
+  )
+}
+
+const AlbumsSection = async ({ userId }: { userId: number }) => {
+  const albums = await getAlbumsByUser(userId)
+
+  return (
+    <UserResourceCard
+      title="Albums"
+      icon={<LibraryIcon />}
+      total={albums.length}
+      viewMoreHref={ROUTES.dashboard.userAlbums(userId)}
+      emptyMessage="This user has no albums."
+    >
+      <AlbumList albums={albums.slice(0, PREVIEW_COUNT)} />
+    </UserResourceCard>
+  )
+}
+
+const TodosSection = async ({ userId }: { userId: number }) => {
+  const todos = await getTodosByUser(userId)
+
+  return (
+    <UserResourceCard
+      title="Todos"
+      icon={<CircleCheckIcon />}
+      total={todos.length}
+      viewMoreHref={ROUTES.dashboard.userTodos(userId)}
+      emptyMessage="This user has no todos."
+    >
+      <TodoList todos={todos.slice(0, PREVIEW_COUNT)} />
+    </UserResourceCard>
+  )
+}
 
 export const generateMetadata = async ({
   params,
@@ -208,6 +272,18 @@ export default async function Page({ params }: PageProps) {
             )}
           </CardContent>
         </Card>
+      </div>
+
+      <div className="mt-6 grid gap-6">
+        <Suspense fallback={<ResourceCardSkeleton rows={PREVIEW_COUNT} />}>
+          <PostsSection userId={user.id} />
+        </Suspense>
+        <Suspense fallback={<ResourceCardSkeleton rows={PREVIEW_COUNT / 2} />}>
+          <AlbumsSection userId={user.id} />
+        </Suspense>
+        <Suspense fallback={<ResourceCardSkeleton rows={PREVIEW_COUNT} />}>
+          <TodosSection userId={user.id} />
+        </Suspense>
       </div>
     </div>
   )

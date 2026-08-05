@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserRow } from "@/features/users/components/user-row"
-import type { User } from "@/features/users/schema"
+import type { User } from "@/features/users/schemas"
 import { getInitials } from "@/features/users/utils"
 import { ROUTES } from "@/lib/constants"
 

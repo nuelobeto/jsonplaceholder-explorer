@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { userSchema, type User } from "./schema"
+import { userSchema, type User } from "./schemas"
 
 const BASE_URL = "https://jsonplaceholder.typicode.com"
 

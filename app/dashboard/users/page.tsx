@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 
-import { UsersSearch } from "@/features/users/components/users-search"
+import { SearchInput } from "@/components/dashboard/search-input"
 import { UsersTable } from "@/features/users/components/users-table"
 import { UsersTableSkeleton } from "@/features/users/components/users-table-skeleton"
 import { getUsers } from "@/features/users/services"
@@ -38,7 +38,11 @@ export default async function Page({
       </header>
 
       <div className="mt-6">
-        <UsersSearch query={q} />
+        <SearchInput
+          query={q}
+          placeholder="Search by name, email, company…"
+          label="Search users"
+        />
       </div>
 
       {/* Keyed on the query so each search re-suspends into the skeleton. */}
