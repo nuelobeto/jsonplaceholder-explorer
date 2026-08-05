@@ -4,19 +4,28 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion, useMotionValueEvent, useScroll } from "motion/react"
 import { Container } from "../container"
-import { buttonVariants } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
 import { cn } from "@/lib/utils"
-
-const navLinks = [
-  { href: "#features", label: "Features" },
-  { href: "#resources", label: "Resources" },
-  { href: "#about", label: "About" },
-]
+import { LANDING_NAV_LINKS, ROUTES } from "@/lib/constants"
+import { MenuIcon, MoonIcon, SunIcon } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useTheme } from "next-themes"
 
 export const Header = () => {
+  const { resolvedTheme, setTheme } = useTheme()
   const { scrollY, scrollYProgress } = useScroll()
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState<string | null>(null)
+
+  const toggleTheme = () =>
+    setTheme(resolvedTheme === "dark" ? "light" : "dark")
 
   useMotionValueEvent(scrollY, "change", (value) => {
     setScrolled(value > 12)
@@ -24,9 +33,9 @@ export const Header = () => {
 
   // Highlight whichever section currently owns the middle of the viewport.
   useEffect(() => {
-    const sections = navLinks
-      .map(({ href }) => document.getElementById(href.slice(1)))
-      .filter((el): el is HTMLElement => el !== null)
+    const sections = LANDING_NAV_LINKS.map(({ href }) =>
+      document.getElementById(href.slice(1))
+    ).filter((el): el is HTMLElement => el !== null)
 
     if (sections.length === 0) return
 
@@ -52,17 +61,57 @@ export const Header = () => {
       )}
     >
       <Container className="flex h-16 items-center justify-between">
-        <Link href="/" className="group flex items-center gap-2 font-semibold">
-          <span
-            aria-hidden
-            className="size-2.5 rounded-full bg-linear-to-br from-brand to-brand-accent transition-transform duration-300 group-hover:scale-125"
-          />
-          JSONPlaceholder Explorer
-        </Link>
+        <div className="flex items-center gap-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="icon" />}
+              className="md:hidden"
+            >
+              <MenuIcon />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-[180px]">
+              <DropdownMenuGroup>
+                {LANDING_NAV_LINKS.map((link) => (
+                  <DropdownMenuItem key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active === link.href ? "true" : undefined}
+                      className={cn(
+                        "flex w-full items-center transition-colors",
+                        active === link.href
+                          ? "text-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={toggleTheme}>
+                  Toggle Theme
+                </DropdownMenuItem>
+                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Link
+            href="/"
+            className="group flex items-center gap-2 font-semibold"
+          >
+            <span
+              aria-hidden
+              className="size-2.5 rounded-full bg-linear-to-br from-brand to-brand-accent transition-transform duration-300 group-hover:scale-125"
+            />
+            JSONPlaceholder Explorer
+          </Link>
+        </div>
 
         <nav aria-label="Main" className="hidden md:block">
           <ul className="flex items-center gap-1 text-sm">
-            {navLinks.map((link) => (
+            {LANDING_NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -93,9 +142,19 @@ export const Header = () => {
           </ul>
         </nav>
 
-        <Link href="/dashboard" className={buttonVariants({ size: "lg" })}>
-          Dashboard
-        </Link>
+        <div className="hidden items-center gap-4 md:flex">
+          <Button size="icon" variant="ghost" onClick={toggleTheme}>
+            <SunIcon className="hidden dark:block" />
+            <MoonIcon className="block dark:hidden" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          <Link
+            href={ROUTES.dashboard.overview}
+            className={buttonVariants({ size: "lg" })}
+          >
+            Dashboard
+          </Link>
+        </div>
       </Container>
 
       {/* Reading progress. */}

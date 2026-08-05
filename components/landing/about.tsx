@@ -8,6 +8,7 @@ import { SectionHeading } from "@/components/landing/section-heading"
 import { useReveal } from "@/components/landing/use-reveal"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { ROUTES } from "@/lib/constants"
 
 const stack = [
   "Next.js",
@@ -21,7 +22,10 @@ const stack = [
 ]
 
 export const About = () => {
-  const root = useReveal<HTMLElement>({ selector: ".reveal-item", start: "top 75%" })
+  const root = useReveal<HTMLElement>({
+    selector: ".reveal-item",
+    start: "top 75%",
+  })
 
   return (
     <section id="about" ref={root} className="scroll-mt-16 py-24 md:py-32">
@@ -34,10 +38,6 @@ export const About = () => {
             built on a public fake API. It shows how to fetch, model, and
             present interconnected data with Next.js, and it doubles as a
             testbed for testing, accessibility, and performance patterns.
-          </p>
-          <p className="reveal-item text-pretty">
-            No accounts, no keys, no backend to run. Open the dashboard and
-            start exploring.
           </p>
         </div>
 
@@ -60,15 +60,14 @@ export const About = () => {
               className="pointer-events-none absolute -top-24 left-1/2 size-80 -translate-x-1/2 rounded-full bg-brand/15 blur-[80px]"
             />
             <div className="relative">
-              <h3 className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
+              <h3 className="text-2xl font-semibold tracking-tight text-balance md:text-3xl">
                 Ready to poke at 5,860 records?
               </h3>
-              <p className="mx-auto mt-3 max-w-md text-pretty text-sm text-muted-foreground">
-                The dashboard is open — nothing to install, nothing to sign up
-                for.
+              <p className="mx-auto mt-3 max-w-md text-sm text-pretty text-muted-foreground">
+                The dashboard is open.
               </p>
               <Link
-                href="/dashboard"
+                href={ROUTES.dashboard.overview}
                 className={cn(
                   buttonVariants({ size: "lg" }),
                   "group mt-7 h-11 gap-2 px-6 text-sm shadow-lg shadow-brand/20 transition-shadow hover:shadow-xl hover:shadow-brand/30"
