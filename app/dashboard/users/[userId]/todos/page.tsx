@@ -11,6 +11,7 @@ import { UserResourceShell } from "@/features/users/components/user-resource-she
 import { getUser } from "@/features/users/services"
 import { parseUserId } from "@/features/users/utils"
 import { ROUTES } from "@/lib/constants"
+import { buildMetadata } from "@/lib/seo"
 import { paginate, parsePageParam } from "@/lib/pagination"
 
 type PageProps = {
@@ -25,11 +26,13 @@ export const generateMetadata = async ({
   const id = parseUserId(userId)
   const user = id === null ? null : await getUser(id)
 
-  return {
-    title: user
-      ? `Todos for ${user.name} · JSONPlaceholder Explorer`
-      : "User not found · JSONPlaceholder Explorer",
-  }
+  if (!user) return { title: "User not found", robots: { index: false } }
+
+  return buildMetadata({
+    title: `Todos for ${user.name}`,
+    description: `Every task assigned to ${user.name} — searchable and paginated.`,
+    path: ROUTES.dashboard.userTodos(user.id),
+  })
 }
 
 export default async function Page({ params, searchParams }: PageProps) {

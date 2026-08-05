@@ -7,11 +7,13 @@ import { postSchema } from "@/features/posts/schemas"
 import { ROUTES } from "@/lib/constants"
 import { buildResourceHref, countPages, parsePageParam } from "@/lib/pagination"
 import { fetchResourcePage } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Posts · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Posts",
   description: "Search and page through all 100 JSONPlaceholder posts.",
-}
+  path: "/dashboard/posts",
+})
 
 export default async function Page({
   searchParams,

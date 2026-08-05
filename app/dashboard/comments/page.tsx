@@ -7,11 +7,13 @@ import { commentSchema } from "@/features/comments/schemas"
 import { ROUTES } from "@/lib/constants"
 import { buildResourceHref, countPages, parsePageParam } from "@/lib/pagination"
 import { fetchResourcePage } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Comments · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Comments",
   description: "Search and page through all 500 JSONPlaceholder comments.",
-}
+  path: "/dashboard/comments",
+})
 
 export default async function Page({
   searchParams,

@@ -36,6 +36,7 @@ import { ResourceCardSkeleton } from "@/features/users/components/resource-card-
 import { getUser } from "@/features/users/services"
 import { getInitials, parseUserId } from "@/features/users/utils"
 import { ROUTES } from "@/lib/constants"
+import { buildMetadata } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 type PageProps = { params: Promise<{ userId: string }> }
@@ -106,12 +107,15 @@ export const generateMetadata = async ({
   const id = parseUserId(userId)
   const user = id === null ? null : await getUser(id)
 
-  if (!user) return { title: "User not found · JSONPlaceholder Explorer" }
+  if (!user) return { title: "User not found", robots: { index: false } }
 
-  return {
-    title: `${user.name} · JSONPlaceholder Explorer`,
+  return buildMetadata({
+    title: user.name,
     description: `${user.name} (@${user.username}) — ${user.company.name}, ${user.address.city}.`,
-  }
+    path: ROUTES.dashboard.user(user.id),
+    // This segment ships its own generated card naming the user.
+    image: `${ROUTES.dashboard.user(user.id)}/opengraph-image`,
+  })
 }
 
 export default async function Page({ params }: PageProps) {

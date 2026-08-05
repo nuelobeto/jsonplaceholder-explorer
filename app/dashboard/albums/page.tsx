@@ -7,11 +7,13 @@ import { albumSchema } from "@/features/albums/schemas"
 import { ROUTES } from "@/lib/constants"
 import { buildResourceHref, countPages, parsePageParam } from "@/lib/pagination"
 import { fetchResourcePage } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Albums · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Albums",
   description: "Search and page through all 100 JSONPlaceholder albums.",
-}
+  path: "/dashboard/albums",
+})
 
 export default async function Page({
   searchParams,

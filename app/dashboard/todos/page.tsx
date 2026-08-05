@@ -7,11 +7,13 @@ import { todoSchema } from "@/features/todos/schemas"
 import { ROUTES } from "@/lib/constants"
 import { buildResourceHref, countPages, parsePageParam } from "@/lib/pagination"
 import { fetchResourcePage } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Todos · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Todos",
   description: "Search and page through all 200 JSONPlaceholder todos.",
-}
+  path: "/dashboard/todos",
+})
 
 export default async function Page({
   searchParams,
