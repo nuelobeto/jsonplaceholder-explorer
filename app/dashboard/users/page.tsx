@@ -1,17 +1,20 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 
+import { buildMetadata } from "@/lib/seo"
+
 import { SearchInput } from "@/components/dashboard/search-input"
 import { UsersTable } from "@/features/users/components/users-table"
 import { UsersTableSkeleton } from "@/features/users/components/users-table-skeleton"
 import { getUsers } from "@/features/users/services"
 import { filterUsers } from "@/features/users/utils"
 
-export const metadata: Metadata = {
-  title: "Users · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Users",
   description:
     "Browse and search the ten JSONPlaceholder users — contact details, company, and location.",
-}
+  path: "/dashboard/users",
+})
 
 /** Fetches and filters on the server; suspended so the skeleton can show. */
 const UsersList = async ({ query }: { query: string }) => {

@@ -7,11 +7,13 @@ import { photoSchema } from "@/features/photos/schemas"
 import { ROUTES } from "@/lib/constants"
 import { buildResourceHref, countPages, parsePageParam } from "@/lib/pagination"
 import { fetchResourcePage } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Photos · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Photos",
   description: "Search and page through all 5,000 JSONPlaceholder photos.",
-}
+  path: "/dashboard/photos",
+})
 
 export default async function Page({
   searchParams,

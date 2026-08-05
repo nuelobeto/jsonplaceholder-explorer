@@ -9,7 +9,9 @@ import { ResourceEmpty } from "@/features/users/components/resource-empty"
 import { UserResourceShell } from "@/features/users/components/user-resource-shell"
 import { getUser } from "@/features/users/services"
 import { parseUserId } from "@/features/users/utils"
+import { ROUTES } from "@/lib/constants"
 import { PAGE_SIZE } from "@/lib/pagination"
+import { buildMetadata } from "@/lib/seo"
 
 type PageProps = {
   params: Promise<{ userId: string }>
@@ -23,11 +25,13 @@ export const generateMetadata = async ({
   const id = parseUserId(userId)
   const user = id === null ? null : await getUser(id)
 
-  return {
-    title: user
-      ? `Albums by ${user.name} · JSONPlaceholder Explorer`
-      : "User not found · JSONPlaceholder Explorer",
-  }
+  if (!user) return { title: "User not found", robots: { index: false } }
+
+  return buildMetadata({
+    title: `Albums by ${user.name}`,
+    description: `Every album ${user.name} has created, loaded as you scroll.`,
+    path: ROUTES.dashboard.userAlbums(user.id),
+  })
 }
 
 export default async function Page({ params, searchParams }: PageProps) {

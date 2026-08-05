@@ -30,12 +30,14 @@ import {
 } from "@/features/analytics/services"
 import { ROUTES } from "@/lib/constants"
 import { fetchResourceCount } from "@/lib/resource-fetch"
+import { buildMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Overview · JSONPlaceholder Explorer",
+export const metadata: Metadata = buildMetadata({
+  title: "Overview",
   description:
     "Live counts and data visualisations across every JSONPlaceholder resource.",
-}
+  path: "/dashboard/overview",
+})
 
 type Resource = {
   resource: string
